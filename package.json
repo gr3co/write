@@ -1,0 +1,25 @@
+{
+  "name": "Write",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "prod": "NODE_ENV=production node server.js"
+  },
+  "dependencies": {
+    "connect-mongo": "*",
+    "connect-flash": "*",
+    "express": "3.x",
+    "express-handlebars": "*",
+    "express-slash": "*",
+    "express-useragent" : "*",
+    "express-validator": "*",
+    "mongoose": "*",
+    "node-sass-middleware" : "*",
+    "passport": "*",
+    "passport-facebook": "*",
+    "passport.socketio" : "*",
+    "socket.io": "*",
+    "underscore": "*"
+  }
+}
