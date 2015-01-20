@@ -44,15 +44,6 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/admin', 
-    requireAuth, requireAdmin, 
-    function(req, res) {
-      res.render('admin', {
-        errors: req.flash('error'),
-        info: req.flash('info')
-      });
-  });
-
   app.get('/login', function(req, res) {
     res.render('login', {
       errors: req.flash('error'),
