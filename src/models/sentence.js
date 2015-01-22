@@ -25,4 +25,12 @@ sentenceSchema.statics.getSentencesForStory = function(story, next) {
 	this.find({story: story}).exec(next);
 };
 
+sentenceSchema.statics.upvote = function(id, user, next) {
+  this.update({'_id' : id}, {$inc : {score : 1}}).exec(next);
+}
+
+sentenceSchema.statics.downvote = function(id, user, next) {
+  this.update({'_id' : id}, {$inc : {score : -1}}).exec(next); 
+}
+
 module.exports = mongoose.model('Sentence', sentenceSchema, 'sentences');

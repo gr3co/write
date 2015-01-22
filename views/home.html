@@ -6,49 +6,17 @@
 		<a class="btn btn-block btn-social btn-lg btn-facebook"
 		href="/auth/facebook"><i class="fa fa-facebook"></i>Sign in with Facebook!</a>
 		{{/unless}}
-		<div class="story">
+		<div id="story" aria-idnum="{{story.id}}">
 			{{#if story}}
 			<h1>{{story.title}}</h1>
 			<p>{{#each story.sentences}}{{this.content}}&nbsp;{{/each}}</p>
-			{{else}}
-			<h2>Yolo Swaq</h2>
-			<p>Lorem ipsum dolor sit amet, neque est. Eros fusce parturient libero, et ac velit, turpis odio tellus at ut aliquet sapien, egestas quisque lectus vivamus. Hendrerit vestibulum omnis, vivamus tristique diam mauris in cursus. Vestibulum molestie enim, elit per sit tempor metus in, dignissim morbi ipsum ad eget nam. Amet ipsum accumsan, volutpat ornare. Mauris libero nullam eget lorem felis, donec varius sed per, tortor elit. Ligula in, ipsum arcu, tincidunt at semper tellus morbi vestibulum in, augue arcu ac, elit et quis wisi tempor urna sed. Adipiscing justo metus, molestie dolor vestibulum, vulputate sodales et, laoreet tellus sed faucibus, tortor quis mauris non...</p>
 			{{/if}}
 		</div>
 	</div>
 </div>
 <div class="container">
-	<div id="sentences">
-		<div class="sentence sentence-top">
-			<div class="score">
-				<div class="upvote-arrow upvoted"><a href="#"><i class="fa fa-chevron-up"></i></a></div>
-				<div class="score-positive">+13</div>
-				<div class="downvote-arrow"><a href="#"><i class="fa fa-chevron-down"></i></a></div>
-			</div>
-			<div class="sentence-content">
-				<div class="sentence-text">Lorem ipsum dolor sit amet, sodales molestiae at ac velit adipiscing nisl.</div>
-			</div>
-		</div>
-		<div class="sentence">
-			<div class="score">
-				<div class="upvote-arrow"><a href="#"><i class="fa fa-chevron-up"></i></a></div>
-				<div class="score-neutral">+0</div>
-				<div class="downvote-arrow"><a href="#"><i class="fa fa-chevron-down"></i></a></div>
-			</div>
-			<div class="sentence-content">
-				<div class="sentence-text">Mauris libero nullam eget lorem felis, donec varius sed per, tortor elit.</div>
-			</div>
-		</div>
-		<div class="sentence">
-			<div class="score">
-				<div class="upvote-arrow"><a href="#"><i class="fa fa-chevron-up"></i></a></div>
-				<div class="score-negative">-1</div>
-				<div class="downvote-arrow downvoted"><a href="#"><i class="fa fa-chevron-down"></i></a></div>
-			</div>
-			<div class="sentence-content">
-				<div class="sentence-text">Ligula in, ipsum arcu, tincidunt at semper tellus morbi vestibulum in, augue arcu ac, elit et quis wisi tempor urna sed.</div>
-			</div>
-		</div>
+	<div id="sentences-container">
+		<div id="sentences"></div>
 		<hr id="new-sentence-divider" />
 		<div class="sentence" id="new-sentence">
 			<div class="score"></div>
@@ -63,7 +31,6 @@
 				</form>
 			</div>
 		</div>
-
 	</div>
 </div>
 {{>footer}}

@@ -19,8 +19,20 @@ var storySchema = new Schema({
 
 storySchema.statics.getCurrentStory = function(next) {
 	this.findOne({isCurrent: true})
-		.populate('sentences')
-		.exec(next);
+  .populate('sentences')
+  .exec(next);
+}
+
+storySchema.statics.updateCurrentStory = function(remove, next) {
+  if (remove) {
+    this.findOneAndUpdate(
+      {isCurrent: true},
+      {isCurrent: false},
+      {upsert: false},
+      next);
+  } else {
+    next();
+  }
 }
 
 module.exports = mongoose.model('Story', storySchema, 'stories');

@@ -23,7 +23,7 @@ function requireAdmin(req, res, next) {
     } else {
       // user is admin, proceed!
       return next();
-  }});
+    }});
 }
 
 module.exports = function(app) {
@@ -73,14 +73,21 @@ module.exports = function(app) {
         console.log(err);
       } else {
         var saved = _.values(arguments).splice(1);
-        new Story({
-          sentenceCount : saved.length,
-          sentences: _.map(saved, function(e) {
+        Story.updateCurrentStory(req.body.current, function(err) {
+          if (err) {
+            console.log(err);
+          }
+          new Story({
+            sentenceCount : saved.length,
+            sentences: _.map(saved, function(e) {
               return e['_id'];
             }),
-          title: req.body.title
-        }).save(function(err) {
-          return res.redirect('/admin');
+            title: req.body.title,
+            isCurrent: req.body.current
+          }).save(function(err) {
+            req.flash('info', "New story successfully saved.");
+            return res.redirect('/');
+          });
         });
       }
     });

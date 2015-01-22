@@ -1,6 +1,8 @@
 var express = require('express'), 
 passportSocketIo = require("passport.socketio"),
-Sentence = require('mongoose').model('Sentence');
+Sentence = require('mongoose').model('Sentence'),
+Story = require('mongoose').model('Story'),
+_ = require('underscore');
 
 
 module.exports = function(server, cstore) {
@@ -32,17 +34,80 @@ module.exports = function(server, cstore) {
     // for auth related purposes
     var user = socket.conn.request.user;
 
-    socket.on('new_sentence', function(val) {
-      new Sentence({
-        content: val.trim(),
-        submitter: user.id
-      }).save(function(err, sentence) {
+    socket.on('request_sentences', function(val) {
+      Story.getCurrentStory(function(err, story) {
         if (err) {
           console.log(err);
         } else {
-          socket.emit('sentence', {
-            content: sentence.content,
+          if (story == null) {
+            return;
+          }
+          Sentence.find({story: story.id}, 
+            function(err, sentences) {
+              if (err) {
+                console.log(err);
+              } else {
+                socket.emit('sentences', 
+                  _.map(sentences, function(s) {
+                    return {
+                      score: s.score,
+                      content: s.content,
+                      idnum: s.id,
+                      upvoted: _.contains(s.upvotes, user.id),
+                      downvoted: _.contains(s.downvotes, user.id)
+                    };
+                  }));
+              }
+            });
+        }
+      });
+    });
+
+    socket.on('upvote', function(val) {
+      Sentence.upvote(val, user.id, function(err) {
+        Sentence.findOne({'_id' : val}).exec(function(err, sentence) {
+          io.sockets.emit('score_update', {
+            idnum: sentence.id,
             score: sentence.score
+          });
+        });
+      });
+    });
+
+    socket.on('downvote', function(val) {
+      Sentence.downvote(val, user.id, function(err) {
+        Sentence.findOne({'_id' : val}).exec(function(err, sentence) {
+          io.sockets.emit('score_update', {
+            idnum: sentence.id,
+            score: sentence.score
+          });
+        });
+      });
+    });
+
+    socket.on('new_sentence', function(val) {
+      Story.getCurrentStory(function(err, story) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (story == null) {
+            socket.emit('no_story');
+            return;
+          }
+          new Sentence({
+            content: val.trim(),
+            submitter: user.id,
+            story: story.id
+          }).save(function(err, sentence) {
+            if (err) {
+              console.log(err);
+            } else {
+              io.sockets.emit('sentence_confirm', {
+                content: sentence.content,
+                score: sentence.score,
+                idnum: sentence.id
+              });
+            }
           });
         }
       });
