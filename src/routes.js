@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
 User = mongoose.model('User'),
 Story = mongoose.model('Story'),
+Sentence = mongoose.model('Sentence'),
 _ = require('underscore'),
 passport = require('passport');
 
@@ -15,13 +16,14 @@ function requireAuth(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
-  if (req.user.accessLevel == null || req.user.accessLevel < 2) {
-    req.flash('error', "You don't have permission to do that.");
-    res.redirect('/');
-  } else {
-    // user is admin, proceed!
-    return next();
-  }
+  requireAuth(req, res, function(){
+    if (req.user.accessLevel == null || req.user.accessLevel < 2) {
+      req.flash('error', "You don't have permission to do that.");
+      res.redirect('/');
+    } else {
+      // user is admin, proceed!
+      return next();
+  }});
 }
 
 module.exports = function(app) {
@@ -44,10 +46,43 @@ module.exports = function(app) {
     });
   });
 
+  app.get('/admin', requireAdmin, function(req,res) {
+    res.render('admin', {
+      errors: req.flash('error'),
+      info: req.flash('info')
+    });
+  });
+
   app.get('/login', function(req, res) {
     res.render('login', {
       errors: req.flash('error'),
       info: req.flash('info')
+    });
+  });
+
+  app.post('/new/story', requireAdmin, function(req, res) {
+    var raw_sentences = req.body.text.match(/[^\.!\?]+[\.!\?]+/g);
+    var sentences = _.map(raw_sentences, function(s) {
+      return {
+        content: s.trim(),
+        submitter: req.user.id
+      };
+    });
+    Sentence.create(sentences, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        var saved = _.values(arguments).splice(1);
+        new Story({
+          sentenceCount : saved.length,
+          sentences: _.map(saved, function(e) {
+              return e['_id'];
+            }),
+          title: req.body.title
+        }).save(function(err) {
+          return res.redirect('/admin');
+        });
+      }
     });
   });
 

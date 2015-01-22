@@ -1,6 +1,6 @@
 var express = require('express'), 
 passportSocketIo = require("passport.socketio"),
-User = require('mongoose').model('User');
+Sentence = require('mongoose').model('Sentence');
 
 
 module.exports = function(server, cstore) {
@@ -31,6 +31,22 @@ module.exports = function(server, cstore) {
 
     // for auth related purposes
     var user = socket.conn.request.user;
+
+    socket.on('new_sentence', function(val) {
+      new Sentence({
+        content: val.trim(),
+        submitter: user.id
+      }).save(function(err, sentence) {
+        if (err) {
+          console.log(err);
+        } else {
+          socket.emit('sentence', {
+            content: sentence.content,
+            score: sentence.score
+          });
+        }
+      });
+    });
 
   });
 

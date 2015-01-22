@@ -31,13 +31,13 @@ body {
 		float: left;
 		margin-right:5px;
 		text-align: center;
-		.upvote-arrow, .downvote-arrow {
+		.upvote-arrow a, .downvote-arrow a{
 			color: grey;
 		}
-		.upvote-arrow:hover, .upvoted {
+		.upvote-arrow a:hover, .upvoted a{
 			color: $upvote-color !important;
 		}
-		.downvote-arrow:hover, .downvoted {
+		.downvote-arrow a:hover, .downvoted a{
 			color: $downvote-color !important;
 		}
 	}
