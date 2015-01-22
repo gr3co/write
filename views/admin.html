@@ -5,20 +5,13 @@
   <form method="post" action="/new/story">
     <div class="col-md-6">
       <div class="form-group">
-      <label for="story-title">Title</label>
+        <label for="story-title">Title</label>
         <input type="text" class="form-control" id="story-title" placeholder="Enter title..." name="title">
       </div>
       <div class="form-group">
         <label for="story-genre">Genre</label>
         <input type="text" class="form-control" id="story-genre" placeholder="Enter genre..." name="genre">
       </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="current"> Set current story
-        </label>
-      </div>
-      <button type="reset" class="btn btn-info">Clear</button>
-      <button type="submit" class="btn btn-success">Submit</button>
     </div>
 
     <div class="col-md-6">
@@ -26,6 +19,16 @@
         <label for="story-textfield">Story Text</label>
         <textarea class="form-control" id="story-textfield" rows="6" placeholder="Write the story here..." name="text"></textarea>
       </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="current"> Set this as current story
+        </label>
+      </div>
+      <button type="reset" class="btn btn-info">Clear</button>
+      <button type="submit" class="btn btn-success">Submit</button>
     </div>
   </form>
 </div>

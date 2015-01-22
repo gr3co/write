@@ -19,6 +19,14 @@ module.exports = function(server, cstore) {
     }
     accept(null, false);
   };
+  var containsVoter = function(list, voter) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].voter == voter) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   //force authorization before handshaking
   io.set('authorization', passportSocketIo.authorize({
@@ -53,8 +61,8 @@ module.exports = function(server, cstore) {
                       score: s.score,
                       content: s.content,
                       idnum: s.id,
-                      upvoted: _.contains(s.upvotes, user.id),
-                      downvoted: _.contains(s.downvotes, user.id)
+                      upvoted: containsVoter(s.upvotes, user.id),
+                      downvoted: containsVoter(s.downvotes, user.id)
                     };
                   }));
               }
@@ -102,11 +110,12 @@ module.exports = function(server, cstore) {
             if (err) {
               console.log(err);
             } else {
-              io.sockets.emit('sentence_confirm', {
+              io.sockets.emit('sentence', {
                 content: sentence.content,
                 score: sentence.score,
                 idnum: sentence.id
               });
+              socket.emit('sentence_confirm');
             }
           });
         }

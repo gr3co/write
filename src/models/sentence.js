@@ -26,11 +26,17 @@ sentenceSchema.statics.getSentencesForStory = function(story, next) {
 };
 
 sentenceSchema.statics.upvote = function(id, user, next) {
-  this.update({'_id' : id}, {$inc : {score : 1}}).exec(next);
+  this.update({'_id' : id}, {
+    $inc : {score : 1},
+    $addToSet: {upvotes : {timestamp: Date.now(), voter: user}}
+  }).exec(next);
 }
 
 sentenceSchema.statics.downvote = function(id, user, next) {
-  this.update({'_id' : id}, {$inc : {score : -1}}).exec(next); 
+  this.update({'_id' : id}, {
+    $inc : {score : -1},
+    $addToSet: {downvotes : {timestamp: Date.now(), voter: user}}
+  }).exec(next);
 }
 
 module.exports = mongoose.model('Sentence', sentenceSchema, 'sentences');

@@ -20,47 +20,55 @@ body {
 }
 
 .sentence {
-	font-size: 1.2em;
-	width: 100%;
-	height: 72px;
-	display: inline-block;	
-	.score {
-		font-size: 1em;
-		width: 5%;
-		color: $neutral-color;
-		float: left;
-		margin-right:5px;
-		text-align: center;
-		.upvote-arrow a, .downvote-arrow a{
-			color: grey;
-		}
-		.upvote-arrow a:hover, .upvoted a{
-			color: $upvote-color !important;
-		}
-		.downvote-arrow a:hover, .downvoted a{
-			color: $downvote-color !important;
-		}
-	}
-	.score-positive {
-		color: $upvote-color;
-	}
-	.score-negative {
-		color: $downvote-color;
-	}
-	.sentence-content {
-		width: 93%;
-		height: 100%;
-		display: table;
-		float: right;
-	}
-	.sentence-text {
-		text-align: left;
-		vertical-align: middle;
-		display: table-cell;
-		font-weight: normal;
-	}
+  font-size: 1.2em;
+  width: 100%;
+  height: 72px;
+  display: inline-block;  
+  .score {
+    font-size: 1em;
+    width: 5%;
+    color: $neutral-color;
+    float: left;
+    margin-right:5px;
+    text-align: center;
+    .upvote-arrow a, .downvote-arrow a{
+      color: grey;
+    }
+    .upvote-arrow a:hover, .upvoted a{
+      color: $upvote-color !important;
+    }
+    .downvote-arrow a:hover, .downvoted a{
+      color: $downvote-color !important;
+    }
+  }
+  .score-positive {
+    color: $upvote-color;
+  }
+  .score-negative {
+    color: $downvote-color;
+  }
+  .sentence-content {
+    width: 93%;
+    height: 100%;
+    display: table;
+    float: right;
+  }
+  .sentence-text {
+    text-align: left;
+    vertical-align: middle;
+    display: table-cell;
+    font-weight: normal;
+  }
 }
 
 .sentence-top .sentence-text{
-	font-size: 1.4em;
+  font-size: 1.4em;
+}
+
+.form-group { 
+  width: 100%;
+}
+
+#new-sentence-text {
+  width: 75%;
 }
