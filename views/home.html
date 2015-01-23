@@ -8,9 +8,13 @@
 			<p>{{#each story.sentences}}{{this.content}}&nbsp;{{/each}}</p>
 			{{/if}}
 		</div>
+      {{#if user}}
     <div id="update">
       <span class="text-muted">Next update in <span id="update-time">?</span> seconds.</span>
     </div>
+      {{else}}
+      <h3 id="login-banner">Log in to suggest what can happen next!</h3>
+      {{/if}}
 	</div>
 </div>
 <div class="container">
