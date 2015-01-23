@@ -37,6 +37,14 @@ module.exports = function(server, cstore) {
     fail: rejectConnection
   }));
 
+  // automatically update the story every 5 minutes
+  setInterval(function() {
+    Story.appendSentence(function(err, sentence) {
+      io.sockets.emit('story_update', sentence);
+    });
+  }, 1000 * 60 * 5);
+
+
   io.sockets.on('connection', function(socket) {
 
     // for auth related purposes
