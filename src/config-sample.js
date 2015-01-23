@@ -18,7 +18,10 @@ global = {
   facebook: {
     clientID: 'FACEBOOK_CLIENT', // change this
     clientSecret: 'FACEBOOK_SECRET', // change this
-  }
+  },
+
+  // Delay between updating the story with top sentence
+  update_timer: 1000 * 60 * 10;
 
 },
 

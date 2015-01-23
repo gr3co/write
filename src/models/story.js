@@ -39,6 +39,9 @@ storySchema.statics.appendSentence = function(next) {
   this.getCurrentStory(function(err, story) {
     mongoose.model('Sentence').findTopSentence(story.id,
       story.sentenceCount, function(err, sentence) {
+        if (sentence == null) {
+          return next(err, null);
+        }
         story.sentences.push(sentence.id);
         story.sentenceCount++;
         story.save(function(err) {

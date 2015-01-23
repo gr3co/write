@@ -37,12 +37,18 @@ module.exports = function(server, cstore) {
     fail: rejectConnection
   }));
 
-  // automatically update the story every 5 minutes
+  var update_time = new Date(new Date().getTime() + config.update_timer);
+
+  // automatically update the story
   setInterval(function() {
     Story.appendSentence(function(err, sentence) {
-      io.sockets.emit('story_update', sentence);
+      update_time = new Date(new Date().getTime() + config.update_timer);
+      io.sockets.emit('story_update', {
+        sentence: sentence,
+        next_update: update_time - new Date()
+      });
     });
-  }, 1000 * 60 * 5);
+  }, config.update_timer);
 
 
   io.sockets.on('connection', function(socket) {
@@ -64,8 +70,8 @@ module.exports = function(server, cstore) {
               if (err) {
                 console.log(err);
               } else {
-                socket.emit('sentences',
-                  _.map(sentences, function(s) {
+                socket.emit('sentences', {
+                  sentences: _.map(sentences, function(s) {
                     return {
                       score: s.score,
                       content: s.content,
@@ -73,7 +79,9 @@ module.exports = function(server, cstore) {
                       upvoted: containsVoter(s.upvotes, user.id),
                       downvoted: containsVoter(s.downvotes, user.id)
                     };
-                  }));
+                  }),
+                  next_update: update_time - new Date()
+                });
               }
             });
         }

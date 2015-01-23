@@ -6,6 +6,8 @@ var upvote, downvote, force_update;
 
 	socket.emit('request_sentences');
 
+  var remaining = 0;
+
 	var generate_score_div = function(score, voted) {
 		return $('<div class="score">').attr('aria-voted', voted)
 		.append($('<div class="upvote-arrow">').addClass(voted == 'upvote' ? 'upvoted' : '')
@@ -36,6 +38,14 @@ var upvote, downvote, force_update;
      .append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
      .append(info));
   }
+
+  var update_counter = function(update) {
+    remaining = Math.floor(update / 1000);
+  }
+
+  setInterval(function() {
+    $("#update-time").text(remaining--);
+  }, 1000);
 
   upvote = function(element) {
     var parent = $(element).parent().parent();
@@ -81,7 +91,7 @@ var upvote, downvote, force_update;
   });
 
   socket.on('sentences', function(val) {
-    var sorted = val.sort(function(a,b) {return b.score - a.score;});
+    var sorted = val.sentences.sort(function(a,b) {return b.score - a.score;});
     var container = $('#sentences');
     container.empty();
     for (var i = 0; i < sorted.length; i++) {
@@ -93,6 +103,7 @@ var upvote, downvote, force_update;
         .append(generate_score_div(sorted[i].score, vote))
         .append(generate_content_div(sorted[i].content))));
     }
+    update_counter(val.next_update);
   });
 
   socket.on('sentence_confirm', function() {
@@ -114,8 +125,11 @@ var upvote, downvote, force_update;
   });
 
   socket.on('story_update', function(val) {
-    $('#story p').append("&nbsp;"+val);
-    $('#sentences').empty();
+    if (val.sentence) {
+      $('#story p').append("&nbsp;"+val);
+      $('#sentences').empty();
+    }
+    update_counter(val.next_update);
   });
 
 })();

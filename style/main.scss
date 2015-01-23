@@ -23,7 +23,7 @@ body {
   font-size: 1.2em;
   width: 100%;
   height: 72px;
-  display: inline-block;  
+  display: inline-block;
   .score {
     font-size: 1em;
     width: 5%;
@@ -65,8 +65,12 @@ body {
   font-size: 1.4em;
 }
 
-.form-group { 
+.form-group {
   width: 100%;
+}
+
+#update {
+  font-style: italic;
 }
 
 #new-sentence-text {
