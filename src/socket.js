@@ -4,7 +4,6 @@ Sentence = require('mongoose').model('Sentence'),
 Story = require('mongoose').model('Story'),
 _ = require('underscore');
 
-
 module.exports = function(server, cstore) {
 
   //set up socket.io server
@@ -151,5 +150,7 @@ module.exports = function(server, cstore) {
     });
 
   });
+
+  return io;
 
 }

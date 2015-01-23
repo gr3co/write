@@ -69,14 +69,18 @@ if (env === 'development' || env === 'test') {
 
 // compile dat scss
 app.use(sass({
-  src: __dirname, 
+  src: __dirname,
   dest: __dirname + '/public',
-  outputStyle: 'compressed'  
-}));  
-
+  outputStyle: 'compressed'
+}));
 
 // allow public stuff
 app.use(express.static(__dirname + '/public'));
+
+app.use(function(req, res, next) {
+  res.locals.version = require('./package.json').version;
+  next();
+});
 
 // initialize passport
 require('./src/passport')(app);
@@ -100,7 +104,9 @@ db.once('open', function() {
   var server = require('http').createServer(app);
 
   // initialize socket.io
-  require('./src/socket')(server, cstore);
+  var socket = require('./src/socket')(server, cstore);
+  // initialize chat service
+  require('./src/chat')(socket);
 
   server.listen(app.get('port'));
   console.log("Web server listening on port " + app.get('port'));
