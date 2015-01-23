@@ -126,7 +126,7 @@ var upvote, downvote, force_update;
 
   socket.on('story_update', function(val) {
     if (val.sentence) {
-      $('#story p').append("&nbsp;"+val);
+      $('#story p').append("&nbsp;"+val.sentence);
       $('#sentences').empty();
     }
     update_counter(val.next_update);
