@@ -35,4 +35,17 @@ storySchema.statics.updateCurrentStory = function(remove, next) {
   }
 }
 
+storySchema.statics.appendSentence = function(next) {
+  this.getCurrentStory(function(err, story) {
+    mongoose.model('Sentence').findTopSentence(story.id,
+      story.sentenceCount, function(err, sentence) {
+        story.sentences.push(sentence.id);
+        story.sentenceCount++;
+        story.save(function(err) {
+          next(err, sentence.content);
+        });
+    });
+  });
+}
+
 module.exports = mongoose.model('Story', storySchema, 'stories');

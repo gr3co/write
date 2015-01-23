@@ -1,4 +1,4 @@
-var upvote, downvote;
+var upvote, downvote, force_update;
 
 (function() {
 
@@ -59,6 +59,10 @@ var upvote, downvote;
     }
   }
 
+  force_update = function() {
+    socket.emit('force_update');
+  }
+
 	$('#new-sentence-submit').click(function() {
 		socket.emit('new_sentence', $('#new-sentence-text').val());
 		$('#new-sentence-text').empty();
@@ -103,6 +107,11 @@ var upvote, downvote;
       : val.score == 0 ? "score-neutral"
       : "score-negative" )
       .text(val.score);
+  });
+
+  socket.on('story_update', function(val) {
+    $('#story p').append("&nbsp;"+val);
+    $('#sentences').empty();
   });
 
 })();

@@ -1,4 +1,4 @@
-var express = require('express'), 
+var express = require('express'),
 passportSocketIo = require("passport.socketio"),
 Sentence = require('mongoose').model('Sentence'),
 Story = require('mongoose').model('Story'),
@@ -50,12 +50,13 @@ module.exports = function(server, cstore) {
           if (story == null) {
             return;
           }
-          Sentence.find({story: story.id}, 
+          Sentence.find({story: story.id,
+            index: story.sentenceCount},
             function(err, sentences) {
               if (err) {
                 console.log(err);
               } else {
-                socket.emit('sentences', 
+                socket.emit('sentences',
                   _.map(sentences, function(s) {
                     return {
                       score: s.score,
@@ -105,7 +106,8 @@ module.exports = function(server, cstore) {
           new Sentence({
             content: val.trim(),
             submitter: user.id,
-            story: story.id
+            story: story.id,
+            index: story.sentenceCount
           }).save(function(err, sentence) {
             if (err) {
               console.log(err);
@@ -119,6 +121,12 @@ module.exports = function(server, cstore) {
             }
           });
         }
+      });
+    });
+
+    socket.on('force_update', function() {
+      Story.appendSentence(function(err, sentence) {
+        io.sockets.emit('story_update', sentence);
       });
     });
 

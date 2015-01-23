@@ -13,6 +13,7 @@ var sentenceSchema = new Schema({
   	voter: {type: idnum, ref: 'User'}
   }], default: []},
   score: {type: Number, default: 0},
+  index: {type: Number, default: 0},
   submitter: {type: idnum, ref: 'User'},
   story: {type: idnum, ref: 'Story'},
   content: {type: String, default: ''}
@@ -37,6 +38,12 @@ sentenceSchema.statics.downvote = function(id, user, next) {
     $inc : {score : -1},
     $addToSet: {downvotes : {timestamp: Date.now(), voter: user}}
   }).exec(next);
+}
+
+sentenceSchema.statics.findTopSentence = function(storyid, num, next) {
+  this.findOne({story: storyid, index: num})
+    .sort('-score')
+    .exec(next);
 }
 
 module.exports = mongoose.model('Sentence', sentenceSchema, 'sentences');
