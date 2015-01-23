@@ -95,6 +95,10 @@ module.exports = function(server, cstore) {
     });
 
     socket.on('new_sentence', function(val) {
+      // Don't allow empty sentences
+      if (val.trim().length == 0) {
+        return;
+      }
       Story.getCurrentStory(function(err, story) {
         if (err) {
           console.log(err);

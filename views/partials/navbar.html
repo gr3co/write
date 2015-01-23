@@ -14,9 +14,11 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/admin">Admin</a></li>
-        {{#if user}}
         <li class="divider"></li>
+        {{#if user}}
         <li><a href="/logout">Log out</a></li>
+        {{else}}
+        <li><a href="/auth/facebook">Log in</a></li>
         {{/if}}
       </ul>
     </div>

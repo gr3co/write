@@ -2,10 +2,6 @@
 {{>error_flash}}
 <div class="jumbotron">
 	<div class="container">
-		{{#unless user}}
-		<a class="btn btn-block btn-social btn-lg btn-facebook"
-		href="/auth/facebook"><i class="fa fa-facebook"></i>Sign in with Facebook!</a>
-		{{/unless}}
 		<div id="story" aria-idnum="{{story.id}}">
 			{{#if story}}
 			<h1>{{story.title}}</h1>
